@@ -157,7 +157,7 @@ VOID _app_timeconvert (
 	}
 }
 
-LPWSTR _app_gettimedescription (
+LPCWSTR _app_gettimedescription (
 	_In_ ENUM_DATE_TYPE type,
 	_In_ BOOLEAN is_desc
 )
@@ -528,6 +528,7 @@ INT_PTR CALLBACK DlgProc (
 				case TTN_GETDISPINFO:
 				{
 					LPNMTTDISPINFOW lpnmdi;
+					WCHAR buffer[0x80];
 					INT ctrl_id;
 
 					lpnmdi = (LPNMTTDISPINFOW)lparam;
@@ -538,7 +539,11 @@ INT_PTR CALLBACK DlgProc (
 					ctrl_id = GetDlgCtrlID ((HWND)lpnmdi->hdr.idFrom);
 
 					if (ctrl_id == IDC_CURRENT)
-						lpnmdi->lpszText = _r_locale_getstring (IDS_CURRENT);
+					{
+						_r_str_copy (buffer, RTL_NUMBER_OF (buffer), _r_locale_getstring (IDS_CURRENT));
+
+						lpnmdi->lpszText = buffer;
+					}
 
 					break;
 				}
